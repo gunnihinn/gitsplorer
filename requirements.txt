@@ -1,1 +1,6 @@
+cffi==1.12.3
 fusepy==3.0.1
+pkg-resources==0.0.0
+pycparser==2.19
+pygit2==0.28.2
+six==1.12.0

@@ -8,16 +8,47 @@ import os
 import sys
 
 from fuse import FUSE, FuseOSError, Operations
+import pygit2
+
+
+def get_object(repo, root, path):
+    partial = os.path.normpath(path).lstrip('/')
+
+    parts = []
+    while True:
+        head, tail = os.path.split(partial)
+
+        if not head and not tail:
+            break
+        if tail:
+            parts.append(tail)
+        partial = head
+
+    while parts:
+        part = parts.pop()
+        for e in root:
+            if e.name == part:
+                root = repo.get(e.id)
+                break
+        else:
+            raise Exception("Path {} not found".format(path))
+
+    return root
 
 
 class Gitsplorer(Operations):
     def __init__(self, root):
         self.root = root
+        self.repo = pygit2.Repository(os.path.join(root, '.git'))
+        self.commit = self.repo.lookup_reference('refs/heads/master').peel()
 
     def _full_path(self, partial):
         partial = partial.lstrip("/")
         path = os.path.join(self.root, partial)
         return path
+
+    def get_object(self, path):
+        return get_object(self.repo, self.commit.tree, path)
 
     # Filesystem
     def access(self, path, mode):
@@ -46,11 +77,13 @@ class Gitsplorer(Operations):
 
     def readdir(self, path, fh):
         print('readdir', path)
-        full_path = self._full_path(path)
+        obj = self.get_object(path)
 
         dirents = ['.', '..']
-        if os.path.isdir(full_path):
-            dirents.extend(os.listdir(full_path))
+        if obj.type == pygit2.GIT_OBJ_TREE:
+            for e in obj:
+                dirents.append(e.name)
+
         for r in dirents:
             yield r
 
@@ -138,7 +171,18 @@ def main(mountpoint, root):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('root', help="Root of filesystem to mount")
+    parser.add_argument('root', help="Root of filesystem to mount", default='.')
     parser.add_argument('mountpoint', help="Mount point of filesystem")
     args = parser.parse_args()
     main(args.mountpoint, args.root)
+
+#    repo = pygit2.Repository(os.path.join(args.root, '.git'))
+#    head = repo.lookup_reference('refs/heads/master').peel()
+#    tree = head.tree
+#
+#    obj = get_object(repo, head.tree, "/.gitignore")
+#    if obj.type == pygit2.GIT_OBJ_TREE:
+#        for entry in obj:
+#            print(entry.id, entry.type, entry.filemode, entry.name)
+#    elif obj.type == pygit2.GIT_OBJ_BLOB:
+#        print(obj.size)
