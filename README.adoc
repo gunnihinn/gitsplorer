@@ -1,0 +1,47 @@
+= gitsplorer
+
+Gitsplorer is a read-only Git repository explorer. It is more or less equivalent
+to a read-only version of `git checkout $commit_hash`, except it doesn't do any
+writes to disk.
+
+== Use
+
+Gitsplorer requires Python 3. Create a virtual environment and install its
+dependencies:
+
+----
+$ python -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+----
+
+Run the program with:
+
+----
+./main.py [OPTION...] ROOT MOUNTPOINT
+
+OPTIONS:
+
+    --commit HASH       Commit to check out
+    --help              Print help and exit
+----
+
+`ROOT` is the Git repository you would like to look at. `MOUNTPOINT` is a
+directory where it should be mounted.
+
+By default the program mounts the current `HEAD` reference of the `master`
+branch. It is more interesting to pass a `--commit` hash to the program, upon
+which it will show the state of the repository at that commit.
+
+== Possible applications
+
+- Look at the state of a repository at a given commit.
+- Run static analysis at various points in the history of a repository in
+  parallel without doing any disk IO.
+- Patch the program to allow writes to files that aren't in the repository, or
+  perform all writes to a user-specified directory, and run builds of a
+  repository at various points in its history.
+
+== Bugs
+
+Yes. Patches welcome.
