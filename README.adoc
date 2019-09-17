@@ -6,8 +6,8 @@ writes to disk.
 
 == Use
 
-Gitsplorer requires Python 3. Create a virtual environment and install its
-dependencies:
+Gitsplorer requires Python 3 and FUSE. Create a virtual environment and install
+its dependencies:
 
 ----
 $ python -m venv venv
