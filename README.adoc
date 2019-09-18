@@ -6,8 +6,8 @@ writes to disk.
 
 == Use
 
-Gitsplorer requires Python 3 and FUSE. Create a virtual environment and install
-its dependencies:
+Gitsplorer requires Python 3, libfuse and libgit2. Create a virtual environment
+and install its dependencies:
 
 ----
 $ python -m venv venv
@@ -37,7 +37,7 @@ which it will show the state of the repository at that commit.
 
 - Look at the state of a repository at a given commit.
 - Run static analysis at various points in the history of a repository in
-  parallel without doing any disk IO.
+  parallel without writing to disk.
 - Patch the program to allow writes to files that aren't in the repository, or
   perform all writes to a user-specified directory, and run builds of a
   repository at various points in its history.
