@@ -50,7 +50,10 @@ def get_object(repo, root, path):
         nlink = 1
         mode = mode | stat.S_IFREG
     else:
-        nlink = len(root)
+        nlink = 2 # . and ..
+        for e in root:
+            if e.type == 'tree':
+                nlink += 1
         mode = mode | stat.S_IFDIR
 
     return Stat(root, mode, size, nlink)
