@@ -29,9 +29,9 @@ OPTIONS:
 `ROOT` is the Git repository you would like to look at. `MOUNTPOINT` is a
 directory where it should be mounted.
 
-By default the program mounts the current `HEAD` reference of the `master`
-branch. It is more interesting to pass a `--commit` hash to the program, upon
-which it will show the state of the repository at that commit.
+By default the program mounts the current `HEAD` reference. It is more
+interesting to pass a `--commit` hash to the program, upon which it will show
+the state of the repository at that commit.
 
 == Possible applications
 

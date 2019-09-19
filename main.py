@@ -66,7 +66,7 @@ class Gitsplorer(Operations):
         self.gid = os.getgid()
 
         if commit is None:
-            self.commit = self.repo.lookup_reference('refs/heads/master').peel()
+            self.commit = self.repo.head.peel()
         else:
             self.commit = self.repo.get(commit)
         assert isinstance(self.commit, pygit2.Commit)
