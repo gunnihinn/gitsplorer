@@ -81,11 +81,9 @@ class Gitsplorer(Operations):
 
     # Filesystem
     def access(self, path, mode):
-        print('access', path, mode)
         return
 
     def getattr(self, path, fh=None):
-        print('getattr', path, fh)
         st = self.get_object(path)
 
         return {
@@ -115,13 +113,10 @@ class Gitsplorer(Operations):
         return 1
 
     def read(self, path, length, offset, fh):
-        print('READ', path, length, offset, fh)
         stat = self.get_object(path)
-        return stat.obj.data
         return stat.obj.data[offset:offset+length]
 
     def release(self, path, fh):
-        print('RELEASE', path, fh)
         return
 
 
